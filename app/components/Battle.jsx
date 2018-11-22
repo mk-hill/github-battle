@@ -1,5 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+const PlayerPreview = props => {
+  const { id, avatar, username, onReset } = props;
+  return (
+    <div>
+      <div className="column">
+        <img src={avatar} alt={username} className="avatar" />
+        <h2 className="username">@{username}</h2>
+      </div>
+      <button className="reset" onClick={onReset.bind(null, id)}>
+        Reset
+      </button>
+    </div>
+  );
+};
+
+PlayerPreview.propTypes = {
+  id: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  onReset: PropTypes.func.isRequired,
+};
 
 class PlayerInput extends Component {
   constructor(props) {
@@ -66,6 +89,7 @@ class Battle extends Component {
     };
 
     // this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleReset = this.handleSubmit.bind(this);
   }
 
   handleSubmit = (id, username) => {
@@ -77,8 +101,24 @@ class Battle extends Component {
     });
   };
 
+  handleReset = id => {
+    this.setState(() => {
+      const newState = {};
+      newState[`${id}Name`] = '';
+      newState[`${id}Image`] = null;
+      return newState;
+    });
+  };
+
   render() {
-    const { playerOneName, playerTwoName } = this.state;
+    const {
+      playerOneName,
+      playerOneImage,
+      playerTwoName,
+      playerTwoImage,
+    } = this.state;
+    // Getting match prop from router
+    const { match } = this.props;
     return (
       <>
         <div className="row">
@@ -88,15 +128,40 @@ class Battle extends Component {
               label="Player One"
               onSubmit={this.handleSubmit}
             />
-          ) : null}
+          ) : (
+            <PlayerPreview
+              id="playerOne"
+              avatar={playerOneImage}
+              username={playerOneName}
+              onReset={this.handleReset}
+            />
+          )}
           {!playerTwoName ? (
             <PlayerInput
               id="playerTwo"
               label="Player Two"
               onSubmit={this.handleSubmit}
             />
-          ) : null}
+          ) : (
+            <PlayerPreview
+              id="playerTwo"
+              avatar={playerTwoImage}
+              username={playerTwoName}
+              onReset={this.handleReset}
+            />
+          )}
         </div>
+        {playerOneImage && playerTwoImage ? (
+          <Link
+            className="button"
+            to={{
+              pathname: `${match.url}/results`,
+              search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}`,
+            }}
+          >
+            Battle
+          </Link>
+        ) : null}
       </>
     );
   }
