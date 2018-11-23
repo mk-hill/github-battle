@@ -26,5 +26,5 @@ module.exports = {
       template: 'app/index.html',
     }),
   ],
-  mode: 'development',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 };

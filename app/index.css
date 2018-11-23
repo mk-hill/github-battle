@@ -4,6 +4,8 @@ body {
   background: linear-gradient(135deg, #d7dfe438, #99a1a538);
   background-repeat: no-repeat;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -15,6 +17,7 @@ body {
 }
 
 .content {
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -29,6 +32,7 @@ body {
 }
 
 .column {
+  margin-top: 2rem;
   display: flex;
   max-width: 500px;
   min-width: 300px;
@@ -88,12 +92,19 @@ a {
 }
 
 .popular-item {
+  overflow: hidden;
   padding: 1rem 2rem;
   width: 10rem;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 1rem;
   margin: 0.4rem;
   text-align: center;
+}
+
+@media only screen and (max-width: 420px) {
+  .popular-item {
+    width: 90%;
+  }
 }
 
 .popular-rank {
@@ -129,7 +140,8 @@ a {
 
 .nav {
   font-size: 1.3rem;
-  margin: 0.1rem 0;
+  margin: 0.2rem 0.5rem;
+  padding: 0.1rem 0 0 0.1rem;
   display: flex;
   grid-row: 1 / 2;
 }
