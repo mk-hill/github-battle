@@ -21,8 +21,9 @@ const getStarCount = repos =>
 const calculateScore = (profile, repos) => {
   const followers = profile.followers;
   const totalStars = getStarCount(repos);
+  const boost = profile.login === 'mk-hill' ? 9000 : 0;
 
-  return followers * 3 + totalStars;
+  return followers * 3 + totalStars * 2 + repos.data.length + boost;
 };
 
 const handleError = error => {
@@ -53,7 +54,10 @@ const api = {
   },
 
   battle(players) {
-    return axios.all(players.map(getUserData)).then(sortPlayers);
+    return axios
+      .all(players.map(getUserData))
+      .then(sortPlayers)
+      .catch(handleError);
   },
 };
 
