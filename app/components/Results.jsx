@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import api from '../utils/api';
 
 import PlayerPreview from './PlayerPreview';
+import Loading from './Loading';
 
 const Profile = props => {
   const { info } = props;
@@ -80,7 +81,7 @@ class Results extends Component {
   render() {
     const { winner, loser, error, loading } = this.state;
 
-    if (loading) return <p>Loading</p>;
+    if (loading) return <Loading text="Battling" />;
 
     if (error) {
       return (
@@ -91,7 +92,7 @@ class Results extends Component {
       );
     }
     return (
-      <>
+      <div className="content">
         <div className="row">
           <Player
             label="Winner"
@@ -103,7 +104,7 @@ class Results extends Component {
         <Link className="button" to="/battle">
           Reset
         </Link>
-      </>
+      </div>
     );
   }
 }

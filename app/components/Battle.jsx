@@ -99,7 +99,7 @@ class Battle extends Component {
     // Getting match prop from router
     const { match } = this.props;
     return (
-      <>
+      <div style={{ marginTop: '5vh' }}>
         <div className="row">
           {!playerOneName ? (
             <PlayerInput
@@ -145,7 +145,7 @@ class Battle extends Component {
             Battle
           </Link>
         ) : null}
-      </>
+      </div>
     );
   }
 }

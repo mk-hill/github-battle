@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Api from '../utils/api';
+import Loading from './Loading';
 import api from '../utils/api';
 
 const SelectLanguage = ({ onSelect, selectedLanguage }) => {
@@ -50,7 +50,7 @@ const RepoGrid = ({ repos }) => {
             </li>
             <li>
               <a
-                class="popular-link"
+                className="popular-link"
                 href={repo.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -98,16 +98,22 @@ class Popular extends Component {
   };
 
   render() {
-    const { repos } = this.state;
+    const { repos, selectedLanguage } = this.state;
     // Using <> instead of React.Fragment
     return (
-      <>
+      <div>
         <SelectLanguage
           onSelect={this.updateLanguage}
-          selectedLanguage={this.state.selectedLanguage}
+          selectedLanguage={selectedLanguage}
         />
-        {repos ? <RepoGrid repos={repos} /> : <p>Loading...</p>}
-      </>
+        {repos ? (
+          <RepoGrid repos={repos} />
+        ) : selectedLanguage === 'All' ? (
+          <Loading text={`Loading top repos on Github`} />
+        ) : (
+          <Loading text={`Loading top ${selectedLanguage} repos`} />
+        )}
+      </div>
     );
   }
 }
