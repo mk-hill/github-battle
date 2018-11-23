@@ -4,15 +4,22 @@ import { Link } from 'react-router-dom';
 import PlayerPreview from './PlayerPreview';
 
 class PlayerInput extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    username: '',
+  };
 
-    this.state = {
-      username: '',
-    };
-  }
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    label: 'Username',
+  };
 
   handleChange = event => {
+    // Apparently need to capture event value before setState
     const value = event.target.value;
 
     this.setState({ username: value });
@@ -25,24 +32,22 @@ class PlayerInput extends Component {
   };
 
   render() {
+    const { username } = this.state;
+    const { label } = this.props;
     return (
       <form className="column" onSubmit={this.handleSubmit}>
         <label htmlFor="username" className="header">
-          {this.props.label}
+          {label}
         </label>
         <input
           type="text"
           id="username"
           placeholder="Github username"
           autoComplete="off"
-          value={this.state.username}
+          value={username}
           onChange={this.handleChange}
         />
-        <button
-          type="submit"
-          className="button"
-          disabled={!this.state.username}
-        >
+        <button type="submit" className="button" disabled={!username}>
           Submit
         </button>
       </form>
@@ -50,42 +55,25 @@ class PlayerInput extends Component {
   }
 }
 
-PlayerInput.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
-
 class Battle extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      playerOneName: '',
-      playerTwoName: '',
-      playerOneImage: null,
-      playerTwoImage: null,
-    };
-
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleReset = this.handleSubmit.bind(this);
-  }
+  state = {
+    playerOneName: '',
+    playerTwoName: '',
+    playerOneImage: null,
+    playerTwoImage: null,
+  };
 
   handleSubmit = (id, username) => {
-    this.setState(() => {
-      const newState = {};
-      newState[`${id}Name`] = username;
-      newState[`${id}Image`] = `https://github.com/${username}.png?size=200`;
-      return newState;
+    this.setState({
+      [id + 'Name']: username,
+      [id + 'Image']: `https://github.com/${username}.png?size=200`,
     });
   };
 
   handleReset = id => {
-    this.setState(() => {
-      const newState = {};
-      newState[`${id}Name`] = '';
-      newState[`${id}Image`] = null;
-      return newState;
+    this.setState({
+      [id + 'Name']: '',
+      [id + 'Image']: null,
     });
   };
 
@@ -111,7 +99,7 @@ class Battle extends Component {
             <PlayerPreview avatar={playerOneImage} username={playerOneName}>
               <button
                 className="reset"
-                onClick={this.handleReset.bind(null, 'playerOne')}
+                onClick={() => this.handleReset('playerOne')}
               >
                 Reset
               </button>
@@ -127,7 +115,7 @@ class Battle extends Component {
             <PlayerPreview avatar={playerTwoImage} username={playerTwoName}>
               <button
                 className="reset"
-                onClick={this.handleReset.bind(null, 'playerTwo')}
+                onClick={() => this.handleReset('playerTwo')}
               >
                 Reset
               </button>
